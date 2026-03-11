@@ -1,0 +1,52 @@
+Automated SOC Lab: End-to-End Threat Detection & Response
+Overview
+This repository documents the implementation of a full-scale, automated Security Operations Center (SOC) lab. The project bridges the gap between threat detection and incident response by automating the analysis and escalation of critical security alerts. By integrating a SIEM, SOAR platform, Threat Intelligence, and a Case Management system, this lab demonstrates a significant reduction in Mean Time to Respond (MTTR) and mitigates analyst alert fatigue.
+
+Features
+Real-time Threat Detection: Uses Wazuh (SIEM) to monitor and identify malicious activity, such as SSH brute-force attacks.
+
+SOAR Automation: Orchestrates the entire workflow using Shuffle (SOAR), removing manual steps.
+
+Threat Intelligence Enrichment: Automatically queries the VirusTotal API for attacker IP reputation and malicious scores.
+
+Conditional Alert Escalation: Implements customizable logic to prioritize high-fidelity threats and reduce noise.
+
+Case Management & Alerting: Automatically generates actionable alerts in TheHive for analysts and sends instant email notifications.
+
+System Architecture
+
+Data Flow: Kali Linux (Attacker) → Ubuntu Server (Wazuh Agent) → Wazuh Manager (SIEM) → Shuffle (Webhook) ↔ VirusTotal (Enrichment) → TheHive (Case) & Email (Notification)
+
+Technical Stack
+OS: Ubuntu Server 22.04 LTS (Docker Host), Kali Linux (Attacker)
+
+SIEM: Wazuh
+
+SOAR: Shuffle
+
+Threat Intelligence: VirusTotal API (v3)
+
+Case Management: TheHive 5
+
+Notifications: Email (SMTP)
+
+Virtualization: VirtualBox, Docker Compose
+
+Usage / Demo
+To see the automation in action, simulate a brute-force attack from the Kali Linux VM:
+
+Bash
+# Example SSH brute-force command using hydra
+hydra -l [user] -P [password_list] ssh://[target_ip]
+What Happens Next:
+1 Wazuh Agent detects the failed login attempts.
+
+2 Wazuh Manager triggers rule 5712.
+
+3 Shuffle receives the alert via webhook and enriches it with VirusTotal data.
+
+4 Shuffle evaluates the conditional logic (e.g., reputation < 0).
+
+5 Check TheHive Alerts dashboard for the new, enriched alert.
+
+6 Check your configured email inbox for the notification.
